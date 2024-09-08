@@ -71,7 +71,8 @@ function readHeader(buf) {
     "64x" +     // ?
     "1024x" +   // ?
     "I" +       // enable "pro logging" (some magic number?)
-    "66x" +     // ?
+    "2x" +     // ?
+    "64s" +     // session
     "64s" +     // short comment
     "126x";    // ?
 
@@ -93,7 +94,8 @@ function readHeader(buf) {
         vehicleid: head[17],
         venue: head[18],
         pro_logging: head[27],
-        short_comment: head[28]
+        session: head[28],
+        short_comment: head[29]
     };
 }
 
@@ -163,15 +165,12 @@ function  parseData(buffer, dtype, ch) {
     switch (dtype) {
         case 'float32':
             data = struct.unpack('<' + 'f'.repeat(ch.n_data), buffer);
-            //data = new Float32Array(buffer, 0, buffer.length / 4);
             break;
         case 'int16':
             data = struct.unpack('<' + 'h'.repeat(ch.n_data), buffer);
-            //data = new Int16Array(buffer, 0, buffer.length / 2);
             break;
         case 'int32':
             data = struct.unpack('<' + 'i'.repeat(ch.n_data), buffer);
-            // data = new Int32Array(buffer, 0, buffer.length / 4);
             break;
         case 'float16':
             // Node.js doesn't natively support Float16. You might need a custom implementation or library.
