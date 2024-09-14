@@ -1,6 +1,7 @@
 const fs = require('fs').promises;
 const { inspect } = require('util');
 const path = require('path');
+const { cloneDeep } = require('lodash');
 
 const { rimraf } = require('rimraf');
 const Parser = require('..');
@@ -20,7 +21,7 @@ async function start() {
     await parser.load(TEST_FILENAME);
 
     //console.log(inspect(parsed, { depth: null, colors: true }));
-    fs.writeFile("parsed/data.json", JSON.stringify(parser.data, null, 2));
+    fs.writeFile("parsed/data.json", JSON.stringify(withoutData(parser.data), null, 2));
     console.log("Parsed and saved to parsed/data.json");
 
     fs.mkdir("parsed/channels");
@@ -41,6 +42,16 @@ async function start() {
             fs.writeFile(`parsed/lap-${lap}-${channel}.txt`, lapData.join("\r\n"));
         }
     }
+}
+
+function withoutData(data) {
+    const copy = cloneDeep(data);
+
+    copy.channels.forEach(channel => {
+        delete channel.data;
+    });
+
+    return copy;
 }
 
 
