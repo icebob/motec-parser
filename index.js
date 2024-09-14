@@ -283,8 +283,27 @@ class LDXParser {
     };
   }
 
+  getChannel(channelName) {
+    return this.data.channels.find((ch) => ch.name === channelName);
+  }
+
+  generateDistanceData(lap) {
+    const channel = this.getChannel("SPEED");
+    const channelMs = 1000 / channel.rec_freq;
+
+    const data = this.getChannelData(lap, "SPEED");
+    let dist = 0;
+
+    const distanceData = data.map((speed) => {
+      dist += speed / 1000 * channelMs;
+      return dist;
+    });
+
+    return distanceData;
+  }
+
   getChannelData(lap, channelName) {
-    const channel = this.data.channels.find((ch) => ch.name === channelName);
+    const channel = this.getChannel(channelName);
     if (!channel) {
       throw new Error(`Channel not found: ${channelName}`);
     }

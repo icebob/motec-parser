@@ -41,6 +41,9 @@ async function start() {
             }
             fs.writeFile(`parsed/lap-${lap}-${channel}.txt`, lapData.join("\r\n"));
         }
+
+        const distanceData = parser.generateDistanceData(lap);
+        fs.writeFile(`parsed/lap-${lap}-DISTANCE.txt`, distanceData.join("\r\n"));
     }
 }
 
