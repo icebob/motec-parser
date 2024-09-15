@@ -8,7 +8,7 @@ const Parser = require('..');
 
 
 //const TEST_FILENAME = "test-files/GO2 M4 GT3 SIL E Q02 MOTEC.ldx";
-const TEST_FILENAME = "test-files/Spa-bmw_m4_gt3-5-2024.09.10-18.59.58.ldx";
+const TEST_FILENAME = "test-files/Spa-bmw_m4_gt3-2-2024.09.15-11.23.15.ldx";
 
 async function start() {
 

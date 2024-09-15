@@ -34,7 +34,9 @@ class LDXParser {
         }
       );
 
-    json.LDXFile.children[0].Layers.children[1].Details.children.forEach(child => {
+      this.data.totalLaps = this.data.beacons.length + 1;
+
+    json.LDXFile.children[0]?.Layers?.children?.[1]?.Details?.children?.forEach(child => {
         if (child.String.Id == "Total Laps") {
             this.data.totalLaps = Number(child.String.Value);
         } else if (child.String.Id == "Fastest Time") {
@@ -294,8 +296,18 @@ class LDXParser {
     const data = this.getChannelData(lap, "SPEED");
     let dist = 0;
 
+    let prevSpeed = data[0];
     const distanceData = data.map((speed) => {
       dist += speed / 1000 * channelMs;
+
+      /*const divider = 1; Math.round(channelMs);
+
+      const ds = (speed - prevSpeed) / divider;
+      for (let i = 1; i <= divider; i++) {
+        dist += (prevSpeed + ds * i) / divider / 1000 * channelMs;
+      }
+
+      prevSpeed = speed;*/
       return dist;
     });
 
@@ -303,6 +315,10 @@ class LDXParser {
   }
 
   getChannelData(lap, channelName) {
+    if (this.totalLaps < lap) {
+      throw new Error(`Lap ${lap} not found`);
+    }
+
     const channel = this.getChannel(channelName);
     if (!channel) {
       throw new Error(`Channel not found: ${channelName}`);
