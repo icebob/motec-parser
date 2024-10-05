@@ -297,17 +297,14 @@ class LDXParser {
     let dist = 0;
 
     let prevSpeed = data[0];
-    const distanceData = data.map((speed) => {
-      dist += speed / 1000 * channelMs;
+    const distanceData = data.map((speed, i) => {
+      if (i == 0) return 0;
 
-      /*const divider = 1; Math.round(channelMs);
+      const avgSpeed = (speed + prevSpeed) / 2;
+      dist += avgSpeed * (channelMs / 1000);
 
-      const ds = (speed - prevSpeed) / divider;
-      for (let i = 1; i <= divider; i++) {
-        dist += (prevSpeed + ds * i) / divider / 1000 * channelMs;
-      }
+      prevSpeed = speed;
 
-      prevSpeed = speed;*/
       return dist;
     });
 
